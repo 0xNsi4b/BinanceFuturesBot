@@ -2,6 +2,8 @@ import threading
 import time
 from binance.client import Client
 from config import api
+import numpy as np
+
 
 api_key = api.key.get_secret_value()
 api_secret = api.secret.get_secret_value()
@@ -67,6 +69,11 @@ class FuturesObj:
                 )
 
 
+def round_down(number, decimals=0):
+    factor = 10 ** decimals
+    return np.floor(number * factor) / factor
+
+
 def get_precision(symbol: str) -> int:
     exchange_info = binance.futures_exchange_info()
     precision = None
@@ -81,7 +88,7 @@ def get_precision(symbol: str) -> int:
 def open_position(futures_obj: FuturesObj, price: float, side: tuple[str, str]):
     # Get quantity
     if futures_obj.precision != 0:
-        quantity = round((futures_obj.value_usd / price * futures_obj.leverage), futures_obj.precision)
+        quantity = round_down((futures_obj.value_usd / price * futures_obj.leverage), futures_obj.precision)
     else:
         quantity = int(futures_obj.value_usd / price * futures_obj.leverage)
 
