@@ -57,7 +57,7 @@ def show_list():
 
 def main():
     def check_position_thread(item):
-        check_position(item)
+        check_balance(item)
 
     def console_command_thread():
         while True:
@@ -71,7 +71,6 @@ def main():
         threads_dict[item.symbol] = StoppableThread(target=check_position_thread, args=(item,))
         threads_dict[item.symbol].start()
 
-    print(threads_dict)
     console_thread = threading.Thread(target=console_command_thread)
     console_thread.start()
 
