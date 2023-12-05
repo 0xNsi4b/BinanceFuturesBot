@@ -42,11 +42,11 @@ class FuturesObj:
     def read_console(self):
         self.symbol = input('Trading pair: ')
         self.leverage = int(input('Leverage: '))
-        self.value_usd = int(input('Value usdt: '))
-        self.make_long = int(input('Long order price: '))
-        self.close_long = int(input('Long order stop-loss: '))
-        self.make_short = int(input('Short order price: '))
-        self.close_short = int(input('Short order stop-loss: '))
+        self.value_usd = float(input('Value usdt: '))
+        self.make_long = float(input('Long order price: '))
+        self.close_long = float(input('Long order stop-loss: '))
+        self.make_short = float(input('Short order price: '))
+        self.close_short = float(input('Short order stop-loss: '))
 
     def read_csv(self, df, number):
         self.symbol = df['Pair'].iloc[number]
