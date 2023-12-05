@@ -129,11 +129,12 @@ def get_position(futures_obj: FuturesObj):
             return position
 
 
-def check_position(futures_obj: FuturesObj):
+def check_position(futures_obj: FuturesObj, print_close: bool = True):
     while not threads_dict[futures_obj.symbol].stopped():
         position = get_position(futures_obj)
         if float(position['entryPrice']) <= 0:
-            print(f'{futures_obj.symbol} close position')
+            if print_close:
+                print(f'{futures_obj.symbol} close position')
             check_balance(futures_obj)
 
         time.sleep(5)

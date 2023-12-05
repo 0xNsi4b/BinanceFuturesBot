@@ -56,16 +56,33 @@ def show_list():
 
 
 def main():
+    print('Starting bot. The output appears when opening and closing positions')
+
     def check_position_thread(item):
-        check_balance(item)
+        attempts = 0
+        while attempts < 5:
+            try:
+                check_position(item, False)
+                break
+            except Exception as e:
+                print(f'Error: {e}\n New connection attempt')
+                attempts += 1
+                time.sleep(15)
+        if attempts == 5:
+            print(f'Failed to restore connection for {item.symbol}. Close position')
 
     def console_command_thread():
-        while True:
+        stopped = 0
+        while stopped < len(threads_dict):
             command = input().split()
             if command[0] == 'stop' and command[1] in threads_dict:
                 threads_dict[command[1]].stop()
                 print(f'stopped {command[1]}')
-                break
+                stopped += 1
+            if command[0] == 'exit':
+                for thread_name in threads_dict:
+                    threads_dict[thread_name].stop()
+                    stopped += 1
 
     for item in lst_futures_obj:
         threads_dict[item.symbol] = StoppableThread(target=check_position_thread, args=(item,))
