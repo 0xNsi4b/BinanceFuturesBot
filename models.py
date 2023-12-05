@@ -1,5 +1,7 @@
 import threading
 import time
+from typing import Tuple
+
 from binance.client import Client
 from config import api
 import numpy as np
@@ -85,7 +87,7 @@ def get_precision(symbol: str) -> int:
     return int(precision)
 
 
-def open_position(futures_obj: FuturesObj, price: float, side: tuple[str, str]):
+def open_position(futures_obj: FuturesObj, price: float, side: Tuple[str, str]):
     # Get quantity
     if futures_obj.precision != 0:
         quantity = round_down((futures_obj.value_usd / price * futures_obj.leverage), futures_obj.precision)

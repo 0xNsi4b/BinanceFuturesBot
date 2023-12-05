@@ -65,7 +65,7 @@ def main():
                 check_position(item, False)
                 break
             except Exception as e:
-                print(f'Error: {e}\n New connection attempt')
+                print(f'Error: {e} New connection attempt {item.symbol}')
                 attempts += 1
                 time.sleep(15)
         if attempts == 5:
@@ -81,8 +81,10 @@ def main():
                 stopped += 1
             if command[0] == 'exit':
                 for thread_name in threads_dict:
-                    threads_dict[thread_name].stop()
-                    stopped += 1
+                    if not threads_dict[thread_name].stopped():
+                        threads_dict[thread_name].stop()
+                        print(f'stopped {command[1]}')
+                        stopped += 1
 
     for item in lst_futures_obj:
         threads_dict[item.symbol] = StoppableThread(target=check_position_thread, args=(item,))
